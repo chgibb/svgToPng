@@ -1,1 +1,2 @@
 # svgToPng
+MVP SVG to PNG converter supporting SVG's ```<textPath>``` element. Ugly but functional. Conceived for personal use because I could not find a third-party website or tool that was easy to use and supported ```<textPath>```.
