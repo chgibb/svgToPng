@@ -1,0 +1,62 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <input id="width" placeholder="width" />
+        <input id="height" placeholder="height" />
+        <textarea id="svgIn" placeholder="SVG source"></textarea>
+        <canvas id="canvas"></canvas>
+        <a id="download" download="svg.png" href="#">Download</a>
+        <script>
+            function render()
+            {
+                let svgStr = document.getElementById("svgIn").value;
+
+                const ctx = document.getElementById("canvas").getContext("2d");
+                
+                let img = new Image();
+                let url = window.URL.createObjectURL(
+                    new Blob(
+                        [svgStr],
+                        {
+                            type : "image/svg+xml"
+                        }
+                    )
+                );
+                img.onload = function(){
+                    ctx.drawImage(img,0,0);
+                    window.URL.revokeObjectURL(url);
+                };
+
+                img.src = url;
+            }
+
+            document.getElementById("width").onkeypress = document.getElementById("width").onkeyup = function(){
+                document.getElementById("canvas").width = parseInt(document.getElementById("width").value);
+                render();
+            };
+
+            document.getElementById("height").onkeypress = document.getElementById("height").onkeyup = function(){
+                document.getElementById("canvas").height = parseInt(document.getElementById("height").value);
+                render();
+            };
+
+            document.getElementById("svgIn").onchange = document.getElementById("svgIn").onkeyup = function(){
+                render();
+            };
+
+            //adapted from answer by Nippey. https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
+            document.getElementById("download").addEventListener("click",function(){
+                let dt = document.getElementById("canvas").toDataURL("image/png");
+
+                dt = dt.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
+
+                dt = dt.replace(/^data:application\/octet-stream/, 'data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=Canvas.png');
+
+                this.href = dt;
+            },
+            false);
+        </script>
+    </body>
+</html>
